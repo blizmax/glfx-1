@@ -1,5 +1,5 @@
-GLFX -- a framework for OpenGL-based 2D graphics
-================================================
+GLFX &ndash; a framework for OpenGL-based 2D graphics
+=====================================================
 
 Basic idea: create an OpenGL rectangle that covers the drawing surface and 
 use a user-supplied GLSL fragment shader to render it.
@@ -13,7 +13,7 @@ Two independent modules, 'XDL' and 'glfx' provide the necessary functionality:
 XDL
 ---
 
-XDL and provides one function, `XDL_Main()`, that sets up the XDL application.
+XDL provides one function, `XDL_Main()`, that sets up the XDL application.
 `XDL_Main()` takes a pointer to an `XDL_Options` struct that contains the 
 following fields:
 
