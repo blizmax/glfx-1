@@ -23,16 +23,11 @@ void opt_redraw(unsigned int timestamp) {
 }
 
 int main(int argc, char *argv) {
-	XDL_Options opts;
+	XDL_Options opts = { "Demo", WINDOW_WIDTH, WINDOW_HEIGHT, -1 };
 
-	opts.title     = "Demo";
-	opts.width     = WINDOW_WIDTH;
-	opts.height    = WINDOW_HEIGHT;
-	opts.frameRate = -1;
 	opts.init      = opt_init;
 	opts.update    = opt_update;
 	opts.redraw    = opt_redraw;
-	opts.exit      = NULL;
 
 	return XDL_Main(&opts);
 }
