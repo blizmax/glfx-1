@@ -20,6 +20,7 @@ void XDL_EventLoop(SDL_Window *window, const XDL_Options *opts) {
 	SDL_PushEvent(&updateEvent);
 
 	while (SDL_WaitEvent(&event)) switch (event.type) {
+
 	case XDL_UPDATE:
 		if (frameDelay == 0)
 			SDL_PushEvent(&updateEvent);
@@ -27,13 +28,31 @@ void XDL_EventLoop(SDL_Window *window, const XDL_Options *opts) {
 			SDL_AddTimer(frameDelay, XDL_TimerCallback_PushEvent, &updateEvent);
 		if (opts->update)
 			opts->update(event.common.timestamp);
+
 	case XDL_REDRAW:
 		if (opts->redraw)
 			opts->redraw(event.common.timestamp);
 		SDL_GL_SwapWindow(window);
 		break;
+
+	case SDL_MOUSEMOTION:
+		if (opts->mouseMotion)
+			opts->mouseMotion(event.common.timestamp, event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+		break;
+
+	case SDL_MOUSEBUTTONDOWN:
+		if (opts->mouseButtonDown[event.button.button-1])
+			opts->mouseButtonDown[event.button.button-1](event.common.timestamp, event.button.x, event.button.y);
+		break;
+
+	case SDL_MOUSEBUTTONUP:
+		if (opts->mouseButtonUp[event.button.button-1])
+			opts->mouseButtonUp[event.button.button-1](event.common.timestamp, event.button.x, event.button.y);
+		break;
+
 	case SDL_KEYUP:
 		if (event.key.keysym.sym != SDLK_ESCAPE) break;
+
 	case SDL_QUIT:
 		return;
 	}
