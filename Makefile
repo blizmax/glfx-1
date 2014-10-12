@@ -5,4 +5,4 @@ CFLAGS += -DGL_GLEXT_PROTOTYPES
 	ld -r -b binary -o $@ $^
 
 demo: main.o glfx.o XDL.o frag.o
-	$(CC) -lSDL2 -lGL $^ -o$@
+	$(CC) -lSDL2 -lGL -lm $^ -o$@
