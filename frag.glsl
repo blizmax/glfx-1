@@ -42,12 +42,12 @@ vec4 colorHue(float hue) {
 
 	// Construct RGB component arrays
 	float compR[6], compG[6], compB[6];
-	compR[0] = compG[2] = compB[4] = 1.0;
-	compR[1] = compG[3] = compB[5] = q;
-	compR[2] = compG[4] = compB[0] = 0.0;
-	compR[3] = compG[5] = compB[1] = 0.0;
-	compR[4] = compG[0] = compB[2] = p;
-	compR[5] = compG[1] = compB[3] = 1.0;
+	compR[0] = 1.0; compG[0] = p;   compB[0] = 0.0;
+	compR[1] = q;   compG[1] = 1.0; compB[1] = 0.0;
+	compR[2] = 0.0; compG[2] = 1.0; compB[2] = p;
+	compR[3] = 0.0; compG[3] = q;   compB[3] = 1.0;
+	compR[4] = p;   compG[4] = 0.0; compB[4] = 1.0;
+	compR[5] = 1.0; compG[5] = 0.0; compB[5] = q;
 
 	// Calculate hexant
 	int i = int(hue / THIRD_PI);
