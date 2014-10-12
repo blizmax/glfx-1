@@ -7,10 +7,10 @@
 #define WINDOW_HEIGHT 400
 
 // Radius of colour picker
-#define R0 160.0
+#define R0 130.0
 
 // Radius of hue wheel
-#define R1 200.0
+#define R1 180.0
 
 extern char _binary_frag_glsl_start;
 

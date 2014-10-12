@@ -2,10 +2,10 @@
 #define THIRD_PI 1.0471975511965976
 
 // Radius of colour picker
-#define R0 160.0
+#define R0 130.0
 
 // Radius of hue wheel
-#define R1 200.0
+#define R1 180.0
 
 uniform float hue;  // Hue (in radians)
 uniform vec2 windowSize;
