@@ -1,11 +1,15 @@
+#version 130
+
 #define TWO_PI   6.283185307179586
 #define THIRD_PI 1.0471975511965976
 
+#define rgb(R, G, B) vec4(R, G, B, 1.0)
+
 // Radius of colour picker
-#define R0 130.0
+#define R0 130
 
 // Radius of hue wheel
-#define R1 180.0
+#define R1 180
 
 uniform float hue;  // Hue (in radians)
 uniform vec2 windowSize;
@@ -22,13 +26,13 @@ uniform vec2 windowSize;
 
 // Modify the saturation of the given color.
 vec4 adjustSat(vec4 color, float sat) {
-	return 0.5 * (1.0 - sat) + sat * color;
+	return 0.5 * (1 - sat) + sat * color;
 }
 
 // Modify the saturation and luminosity of the given color.
 // Note: adjustSatLux(color, sat, 0.0) == adjustSat(color, sat);
 vec4 adjustSatLux(vec4 color, float sat, float lux) {
-	return (lux < 0.0) ? (1.0 + lux) * adjustSat(color, sat) : lux + (1.0 - lux) * adjustSat(color, sat);
+	return (lux < 0) ? (1 + lux) * adjustSat(color, sat) : lux + (1 - lux) * adjustSat(color, sat);
 }
 
 // Given a hue value (in radians), generate the corresponding RGB value.
@@ -38,21 +42,19 @@ vec4 colorHue(float hue) {
 
 	// Calculate fractional components
 	float p = fract(hue / THIRD_PI);
-	float q = 1.0 - p;
-
-	// Construct RGB component arrays
-	float compR[6], compG[6], compB[6];
-	compR[0] = 1.0; compG[0] = p;   compB[0] = 0.0;
-	compR[1] = q;   compG[1] = 1.0; compB[1] = 0.0;
-	compR[2] = 0.0; compG[2] = 1.0; compB[2] = p;
-	compR[3] = 0.0; compG[3] = q;   compB[3] = 1.0;
-	compR[4] = p;   compG[4] = 0.0; compB[4] = 1.0;
-	compR[5] = 1.0; compG[5] = 0.0; compB[5] = q;
+	float q = 1 - p;
 
 	// Calculate hexant
 	int i = int(hue / THIRD_PI);
 
-	return vec4(compR[i], compG[i], compB[i], 1.0);
+	switch (i) {
+	case 0: return rgb(1, p, 0);
+	case 1: return rgb(q, 1, 0);
+	case 2: return rgb(0, 1, p);
+	case 3: return rgb(0, q, 1);
+	case 4: return rgb(p, 0, 1);
+	case 5: return rgb(1, 0, q);
+	}
 }
 
 // Given a hue value (in radians), saturation, and luminosity, generate the corresponding RGB value.
@@ -73,7 +75,7 @@ void main() {
 
 	if (r < R0) {
 		vec2 ray = offset / R0;
-		float sat = ray.x / sqrt(1.0 - ray.y * ray.y);
+		float sat = ray.x / sqrt(1 - ray.y * ray.y);
 		float lux = abs(ray.y) * ray.y;
 		gl_FragColor = colorHSL(hue, sat, lux);
 	}
@@ -81,6 +83,6 @@ void main() {
 		gl_FragColor = colorHue(hue + theta);
 	}
 	else {
-		gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+		gl_FragColor = rgb(0, 0, 0);
 	}
 }
