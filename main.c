@@ -14,7 +14,8 @@
 
 extern char _binary_frag_glsl_start;
 
-int grabbed = 0;
+XDL_Options opts = { "Demo", WINDOW_WIDTH, WINDOW_HEIGHT, -1 };
+
 int grabX, grabY;
 float grabAngle;
 
@@ -46,36 +47,30 @@ void opt_redraw(unsigned int timestamp) {
 	glfxRedraw();
 }
 
+void opt_cursor_dragged(unsigned int timestamp, int x, int y, int dx, int dy) {
+	glUniform1f(hueLoc, hue + centreAngle(x, y) - grabAngle);
+}
+
 void opt_left_button_pressed(unsigned int timestamp, int x, int y) {
 	float r = centreDist(x, y);
 	if (r >= R0 && r < R1) {
-		grabbed = 1;
 		grabX = x;
 		grabY = y;
 		grabAngle = centreAngle(x, y);
+		opts.mouseMotion = opt_cursor_dragged;
 	}
 }
 
 void opt_left_button_released(unsigned int timestamp, int x, int y) {
-	if (grabbed) {
-		grabbed = 0;
-		hue += centreAngle(x, y) - grabAngle;
-	}
-}
-
-void opt_cursor_moved(unsigned int timestamp, int x, int y, int dx, int dy) {
-	if (grabbed) {
-		glUniform1f(hueLoc, hue + centreAngle(x, y) - grabAngle);
-	}
+	hue += centreAngle(x, y) - grabAngle;
+	opts.mouseMotion = NULL;
 }
 
 int main(int argc, char *argv) {
-	XDL_Options opts = { "Demo", WINDOW_WIDTH, WINDOW_HEIGHT, -1 };
 
 	opts.init   = opt_init;
 	opts.redraw = opt_redraw;
 
-	opts.mouseMotion                      = opt_cursor_moved;
 	opts.mouseButtonDown[XDL_BUTTON_LEFT] = opt_left_button_pressed;
 	opts.mouseButtonUp[XDL_BUTTON_LEFT]   = opt_left_button_released;
 
