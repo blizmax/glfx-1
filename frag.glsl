@@ -24,17 +24,6 @@ uniform vec2 windowSize;
 // Note that inverting the saturation is the same as rotating the 
 // hue by 180deg.
 
-// Modify the saturation of the given color.
-vec4 adjustSat(vec4 color, float sat) {
-	return 0.5 * (1 - sat) + sat * color;
-}
-
-// Modify the saturation and luminosity of the given color.
-// Note: adjustSatLux(color, sat, 0.0) == adjustSat(color, sat);
-vec4 adjustSatLux(vec4 color, float sat, float lux) {
-	return (lux < 0) ? (1 + lux) * adjustSat(color, sat) : lux + (1 - lux) * adjustSat(color, sat);
-}
-
 // Given a hue value (in radians), generate the corresponding RGB value.
 vec4 colorHue(float hue) {
 
@@ -57,9 +46,16 @@ vec4 colorHue(float hue) {
 	}
 }
 
+// Given a hue value (in radians) and saturation, generate the corresponding RGB value.
+vec4 colorHS(float hue, float sat) {
+  vec4 color = colorHue(hue);
+	return 0.5 * (1 - sat) + sat * color;
+}
+
 // Given a hue value (in radians), saturation, and luminosity, generate the corresponding RGB value.
 vec4 colorHSL(float hue, float sat, float lux) {
-	return adjustSatLux(colorHue(hue), sat, lux);
+  vec4 color = colorHS(hue, sat);
+	return (lux < 0) ? (1 + lux) * color : lux + (1 - lux) * color;
 }
 
 float angle(vec2 v) { return atan(v.y, v.x); }
